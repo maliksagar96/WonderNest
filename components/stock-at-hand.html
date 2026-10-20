@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#fbfaf6">
+  <title>Stock at Hand | WonderNest</title>
+  <link rel="stylesheet" href="../css/baseColors.css"><link rel="stylesheet" href="../css/style.css"><link rel="stylesheet" href="../css/stock-at-hand.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="../index.html" aria-label="WonderNest home"><span class="brand-mark" aria-hidden="true">W</span><span class="brand-name">wonder<span>nest</span></span></a>
+      <div class="topbar-right"><a class="back-link" href="front_page.html">← Dashboard</a><span class="today-label" id="today-label"></span><span class="avatar" aria-label="WonderNest profile">WN</span></div>
+    </header>
+    <main class="stock-page">
+      <section class="page-heading"><div><p class="eyebrow">INVENTORY</p><h1>Stock at Hand</h1><p class="page-intro">Know what’s on your shelves, what’s running low, and how much your stock is worth.</p></div><div class="heading-actions"><button class="button button-secondary" id="export-stock" type="button">↓ Export CSV</button></div></section>
+      <section class="summary-grid" aria-label="Stock summary">
+        <article class="summary-card"><span class="summary-label">ITEMS TRACKED</span><strong id="summary-items">0</strong><span class="summary-note">Unique products in inventory</span></article>
+        <article class="summary-card"><span class="summary-label">TOTAL UNITS ON HAND</span><strong id="summary-units">0</strong><span class="summary-note">Across all tracked items</span></article>
+        <article class="summary-card summary-alert"><span class="summary-label">LOW OR OUT OF STOCK</span><strong id="summary-low">0</strong><span class="summary-note">Items at or below threshold</span></article>
+        <article class="summary-card"><span class="summary-label">STOCK VALUE</span><strong id="summary-value">₹0.00</strong><span class="summary-note">Based on recorded unit costs</span></article>
+      </section>
+      <section class="panel inventory-panel" aria-labelledby="inventory-title">
+        <div class="records-heading"><div><p class="eyebrow">YOUR INVENTORY</p><h2 id="inventory-title">Items in stock</h2><p id="inventory-count">0 items</p></div><div class="filter-row">
+          <label class="search-field"><span class="sr-only">Search stock</span><input id="stock-search" type="search" placeholder="Search item name"></label>
+          <div class="category-filter" id="category-filter"><button class="category-filter-button" id="category-filter-button" type="button" aria-label="Filter by category" aria-expanded="false" aria-controls="category-filter-menu">All categories <span aria-hidden="true">⌄</span></button><div class="category-filter-menu" id="category-filter-menu" role="group" aria-label="Choose categories" hidden></div></div>
+          <label class="filter-control"><span class="sr-only">Filter by stock status</span><select id="status-filter"><option value="all">All stock levels</option><option value="in">In stock</option><option value="low">Low stock</option><option value="out">Out of stock</option></select></label>
+        </div></div>
+        <div class="table-wrap"><table><thead><tr><th>ITEM</th><th>THRESHOLD %</th><th>CATEGORY</th><th>ON HAND</th><th>UNIT COST</th><th>STOCK VALUE</th><th>STATUS</th><th>ACTIONS</th></tr></thead><tbody id="stock-rows"></tbody></table></div>
+      </section>
+      <section class="panel history-panel" aria-labelledby="history-title"><div class="records-heading"><div><p class="eyebrow">AUDIT TRAIL</p><h2 id="history-title">Recent stock movements</h2><p>Purchases and manual stock changes, newest first.</p></div></div><div class="table-wrap"><table><thead><tr><th>DATE</th><th>ITEM</th><th>TYPE</th><th>CHANGE</th><th>BALANCE</th><th>NOTE</th></tr></thead><tbody id="movement-rows"></tbody></table></div></section>
+      <footer class="page-footer"><a href="front_page.html">← Back to dashboard</a><span>Purchases sync automatically; record sales or usage as stock-out movements.</span></footer>
+    </main>
+  </div>
+  <dialog class="stock-dialog" id="item-dialog"><form id="item-form"><div class="dialog-heading"><div><p class="eyebrow">INVENTORY ITEM</p><h2 id="item-dialog-title">Edit item</h2><p>Track quantity, cost, and the point when you want a low stock alert.</p></div><button class="icon-button" id="close-item-dialog" type="button" aria-label="Close item form">×</button></div><input type="hidden" name="id"><div class="form-grid">
+    <label class="field">Item name <span class="required-mark">*</span><input name="name" maxlength="100" required placeholder="e.g. Kraft paper bags"></label>
+    
+    <label class="field">Category<select name="category" required><option value="">Choose a Purchases category</option></select><small>Categories are managed in <a href="purchases.html">Purchases</a>.</small></label>
+    <label class="field">Unit<input name="unit" maxlength="24" required list="stock-unit-options" placeholder="e.g. pcs, kg, box"><datalist id="stock-unit-options"><option value="pcs"><option value="kg"><option value="g"><option value="l"><option value="ml"><option value="box"><option value="pack"></datalist></label>
+    <label class="field">Quantity on hand<input name="quantity" type="number" min="0" step="0.001" value="0" required><small>For existing items, a change here is recorded as an adjustment.</small></label>
+    <label class="field">Low stock threshold (%)<input name="thresholdPercent" type="number" min="0" max="100" step="1" value="25" required><small>Default 25%. Warn when on-hand stock falls to this percentage of its highest recorded quantity.</small></label>
+    <label class="field field-wide">Unit cost (₹)<input name="unitCost" type="number" min="0" step="0.01" value="0" required></label>
+  </div><p class="form-error" id="item-form-error" role="alert" hidden></p><div class="dialog-actions"><button class="button button-secondary" id="cancel-item" type="button">Cancel</button><button class="button button-primary" type="submit">Save item</button></div></form></dialog>
+  <dialog class="stock-dialog movement-dialog" id="movement-dialog"><form id="movement-form"><div class="dialog-heading"><div><p class="eyebrow">UPDATE INVENTORY</p><h2 id="movement-title">Adjust stock</h2><p id="movement-item-name"></p></div><button class="icon-button" id="close-movement-dialog" type="button" aria-label="Close stock adjustment">×</button></div><input type="hidden" name="itemId"><label class="field">Movement type<select name="type"><option value="in">Stock in</option><option value="out">Stock out</option><option value="adjustment">Set exact quantity</option></select></label><label class="field">Quantity<input name="quantity" type="number" min="0" step="0.001" value="1" required><small id="movement-quantity-help">Enter the quantity received.</small></label><label class="field">Reason / note<input name="reason" maxlength="120" placeholder="e.g. Restock, damaged, or used"></label><p class="form-error" id="movement-form-error" role="alert" hidden></p><div class="dialog-actions"><button class="button button-secondary" id="cancel-movement" type="button">Cancel</button><button class="button button-primary" type="submit">Save movement</button></div></form></dialog>
+  <script src="../js/form-enter-navigation.js" defer></script><script src="../js/dropdown-utils.js" defer></script><script src="../js/api.js" defer></script><script src="../js/date-format.js" defer></script><script src="../js/stock-at-hand.js" defer></script>
+</body>
+</html>

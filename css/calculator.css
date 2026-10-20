@@ -1,0 +1,51 @@
+.calculator-topbar { width:min(100% - 48px,1160px); min-height:140px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:18px; }
+.calculator-brand { display:flex; align-items:center; gap:14px; color:inherit; text-decoration:none; }
+.calculator-brand .brand-mark { width:52px; height:52px; border-radius:16px; font-size:30px; }
+.calculator-brand small,.calculator-brand strong,.calculator-brand em { display:block; }
+.calculator-brand small { color:var(--color-muted); font-size:10px; font-weight:750; letter-spacing:.15em; }
+.calculator-brand strong { margin-top:2px; font:600 29px/1 Georgia,serif; letter-spacing:-.03em; }
+.calculator-brand em { margin-top:5px; color:var(--color-muted); font-size:12px; font-style:normal; }
+.calculator-actions { display:flex; align-items:center; gap:10px; }
+.calculator-current { padding:11px 15px; border:1.5px solid var(--color-ink); border-radius:11px; color:var(--color-ink); background:#fff; font-size:13px; font-weight:750; }
+.calculator-menu { position:relative; }
+.calculator-menu summary { width:46px; height:46px; display:grid; place-items:center; border:1px solid var(--color-line); border-radius:13px; color:var(--color-primary); background:#fff; font-size:26px; font-weight:800; cursor:pointer; list-style:none; }
+.calculator-menu summary::-webkit-details-marker { display:none; }
+.calculator-menu nav { position:absolute; z-index:5; top:calc(100% + 8px); right:0; width:190px; padding:6px; border:1px solid var(--color-line); border-radius:13px; background:#fff; box-shadow:0 14px 32px rgba(32,51,46,.12); }
+.calculator-menu nav a { display:block; padding:10px 11px; border-radius:8px; color:var(--color-ink); font-size:13px; text-decoration:none; }
+.calculator-menu nav a:hover { background:var(--color-primary-soft); }
+.calculator-page { width:min(100% - 48px,1160px); margin:0 auto; padding:28px 0 24px; }
+.calculator-heading { margin:0 0 21px; }
+.calculator-heading h1 { margin:0; color:var(--color-ink); font:600 clamp(30px,4vw,36px)/1.15 Georgia,serif; letter-spacing:-.03em; }
+.calculator-heading p { margin:7px 0 0; color:var(--color-muted); font-size:14px; }
+.quote-layout { display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:stretch; }
+.panel { border:1px solid var(--color-line); border-radius:19px; background:var(--color-surface); box-shadow:var(--shadow-card); }
+.quote-form { min-height:585px; padding:26px 25px; }
+.section-label { margin:0 0 17px; color:var(--color-primary); font-size:11px; font-weight:850; letter-spacing:.12em; text-transform:uppercase; }
+.field { min-width:0; display:grid; gap:7px; color:var(--color-muted); font-size:12px; font-weight:700; }
+.field-wide { margin-bottom:16px; }
+.field input,.field select { width:100%; min-height:44px; padding:9px 12px; border:1px solid var(--color-line); border-radius:10px; outline:none; color:var(--color-ink); background:#fff; font-family:inherit; font-size:14px; font-weight:450; }
+.field input:focus,.field select:focus { border-color:#72a193; box-shadow:0 0 0 3px rgba(40,92,80,.1); }
+.quote-fields { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.help-text { margin:15px 0 0; color:var(--color-muted); font-size:11px; line-height:1.55; }
+.shelf-button { min-height:42px; margin-top:18px; padding:0 16px; border:0; border-radius:10px; color:#fff; background:var(--color-primary); font-size:12px; font-weight:750; cursor:pointer; }
+.shelf-button:hover:not(:disabled) { background:var(--color-primary-dark); }
+.shelf-button:disabled { opacity:.5; cursor:not-allowed; }
+.stock-deduction-note { margin:9px 0 0; color:var(--color-muted); font-size:10px; line-height:1.5; }
+.calculator-message { margin-top:16px; padding:12px; border-radius:10px; color:var(--color-muted); background:var(--color-primary-soft); font-size:12px; line-height:1.5; }
+.calculator-message.error { color:#8e3e37; background:#fff2f0; }
+.quote-result { min-height:585px; display:flex; flex-direction:column; padding:26px 25px 22px; border-radius:19px; color:#fff; background:linear-gradient(150deg,#2d6759,#214b43); box-shadow:var(--shadow-card); }
+.quote-result .section-label { color:#c7ddd4; }
+.result-product { margin:17px 0 15px; color:#f5faf7; font-size:16px; }
+.result-caption { color:rgba(210,226,218,.65); font-size:12px; }
+.result-total { display:block; margin:4px 0 10px; color:#fff; font:600 clamp(42px,5vw,58px)/1.08 Georgia,serif; letter-spacing:-.045em; }
+.result-lines { margin-top:2px; }
+.result-line { display:flex; align-items:center; justify-content:space-between; gap:14px; min-height:38px; padding:8px 0; border-top:1px solid rgba(255,255,255,.15); font-size:12px; }
+.result-line span { color:#d0e2da; }
+.result-line strong { color:#fff; font-size:12px; font-weight:750; text-align:right; white-space:nowrap; }
+.result-price { margin-top:2px; }
+.result-price strong { font-size:14px; }
+.result-note { margin:auto 0 0; padding-top:18px; color:#c3d8d0; font-size:11px; line-height:1.5; }
+.calculator-footer { display:flex; justify-content:center; gap:6px; margin:24px 0 0; color:var(--color-muted); font-size:11px; }
+.calculator-footer span { color:var(--color-subtle); }
+@media(max-width:760px) { .quote-layout { grid-template-columns:1fr; }.quote-form { min-height:260px; }.quote-result { min-height:460px; } }
+@media(max-width:520px) { .calculator-topbar { width:min(100% - 32px,540px); min-height:76px; }.calculator-brand { gap:9px; }.calculator-brand .brand-mark { width:43px; height:43px; border-radius:14px; font-size:25px; }.calculator-brand strong { font-size:23px; }.calculator-brand small { font-size:8px; }.calculator-brand em { font-size:10px; }.calculator-current { padding:9px 10px; font-size:11px; }.calculator-menu summary { width:40px; height:40px; }.calculator-page { width:min(100% - 32px,540px); padding-top:23px; }.calculator-heading h1 { font-size:31px; }.calculator-heading p { font-size:12px; line-height:1.5; }.quote-form,.quote-result { padding:21px 17px; }.quote-fields { gap:10px; }.field input,.field select { padding:8px; font-size:13px; }.result-total { font-size:43px; }.result-line { font-size:11px; }.result-line strong { font-size:11px; } }

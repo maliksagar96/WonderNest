@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbfaf6">
+  <title>Calculator | WonderNest</title>
+  <link rel="stylesheet" href="../css/baseColors.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/calculator.css">
+</head>
+<body>
+  <header class="calculator-topbar">
+    <a class="calculator-brand" href="front_page.html" aria-label="WonderNest dashboard">
+      <span class="brand-mark" aria-hidden="true">W</span>
+      <span><small>WHIFF OF WONDER</small><strong>Wonder Nest</strong><em>Handmade eco resin casting</em></span>
+    </a>
+    <div class="calculator-actions">
+      <details class="calculator-menu"><summary aria-label="Open navigation menu">⋮</summary><nav><a href="front_page.html">Dashboard</a><a href="recipes.html">Recipes</a><a href="purchases.html">Purchases</a><a href="stock-at-hand.html">Stock at Hand</a></nav></details>
+    </div>
+  </header>
+
+  <main class="calculator-page">
+    <section class="calculator-heading"><h1>Make a quick quote</h1><p>Select a product and quantity to calculate its suggested selling price.</p></section>
+    <div class="quote-layout">
+      <section class="quote-form panel" aria-labelledby="quote-details-title">
+        <h2 class="section-label" id="quote-details-title">Quote details</h2>
+        <label class="field field-wide">Product<select id="product-select" required><option value="">Choose a saved recipe</option></select></label>
+        <div class="quote-fields">
+          <label class="field">Quantity<input id="quantity" type="number" min="1" step="1" value="1"></label>
+          <label class="field">Suggested price / item<input id="price-per-item" type="number" min="0" step="0.01" value="0"></label>
+        </div>
+        <p class="help-text">Price = recipe cost plus labor, overhead and wastage, multiplied by your saved multiplier.</p>
+        <div id="calculator-message" class="calculator-message" role="status" hidden></div>
+      </section>
+      <section class="quote-result" aria-labelledby="estimate-title">
+        <h2 class="section-label" id="estimate-title">Estimate</h2>
+        <p class="result-product" id="result-product">Choose a saved recipe</p>
+        <span class="result-caption">Total including GST</span>
+        <strong class="result-total" id="total-including-gst">₹0.00</strong>
+        <div class="result-lines">
+          <div class="result-line"><span>Manufacturing cost / item</span><strong id="manufacturing-cost">₹0.00</strong></div>
+          <div class="result-line"><span>Labour / item</span><strong id="labor-cost">₹0.00</strong></div>
+          <div class="result-line"><span>Overhead + Wastage Buffer / item</span><strong id="overhead-wastage-cost">₹0.00</strong></div>
+          <div class="result-line"><span>Total cost · <span id="result-quantity">1</span> item</span><strong id="total-cost">₹0.00</strong></div>
+          <div class="result-line"><span>Estimated gross profit</span><strong id="gross-profit">₹0.00</strong></div>
+          <div class="result-line"><span>Multiplier</span><strong id="multiplier-value">1×</strong></div>
+          <div class="result-line result-price"><span>Total Price (without GST)</span><strong id="price-without-gst">₹0.00</strong></div>
+          <div class="result-line"><span>GST (18%)</span><strong id="gst-amount">₹0.00</strong></div>
+        </div>
+        <p class="result-note">Update rates and material usage whenever supplier costs or product setups change.</p>
+      </section>
+    </div>
+    <footer class="calculator-footer">Wonder Nest <span>·</span> Whiff of Wonder</footer>
+  </main>
+
+  <script src="../js/form-enter-navigation.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/calculator.js"></script>
+</body>
+</html>

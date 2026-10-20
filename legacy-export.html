@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Export old WonderNest data</title><link rel="stylesheet" href="css/baseColors.css"><link rel="stylesheet" href="css/style.css"><style>body{min-height:100vh;display:grid;place-items:center;padding:20px}.box{width:min(100%,620px);padding:30px;border:1px solid var(--color-line);border-radius:20px;background:white;box-shadow:var(--shadow-card)}h1{font:500 30px Georgia,serif}.copy{color:var(--color-muted);line-height:1.6}.status{padding:12px;border-radius:9px;background:#f5f7f3;font-size:13px}.button{margin-top:14px;cursor:pointer}</style></head>
+<body><main class="box"><span class="brand-mark" aria-hidden="true">W</span><p class="eyebrow">ONE-TIME DATA MOVE</p><h1>Export previous WonderNest data</h1><p class="copy">Open this page from the same browser and address you used for the old WonderNest app. It reads the old browser records and downloads a JSON file. Then open the new app’s Import Data page and select that file.</p><p class="status" id="export-status">Checking browser storage…</p><button class="button button-primary" id="export-button" type="button" disabled>Download data export</button><p class="copy"><a href="http://127.0.0.1:8000/components/migrate.html">Already exported? Continue to the new app import page →</a></p></main><script>
+(() => {
+  const keys=['wonderNest.vendors.v1','wonderNest.purchases.v1','wonderNest.purchaseCategories.v1','wonderNest.stock.v1','wonderNest.recipes.v1'];
+  const data={format:'WonderNest browser data export',version:1,exportedAt:new Date().toISOString()};
+  let records=0;
+  for(const key of keys){try{const raw=localStorage.getItem(key);if(raw!==null){data[key]=JSON.parse(raw);records++;}}catch{}}
+  const status=document.getElementById('export-status'),button=document.getElementById('export-button');
+  status.textContent=records?`Found ${records} stored dataset${records===1?'':'s'} in this browser context. Download the export, then import it in the new app.`:'No old WonderNest data was found in this browser context. Reopen this page using the same browser address/profile as the old app.';
+  button.disabled=!records;
+  button.addEventListener('click',()=>{const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='wonderNest-browser-data.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+})();
+</script></body></html>

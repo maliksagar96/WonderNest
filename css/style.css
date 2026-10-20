@@ -1,0 +1,19 @@
+*, *::before, *::after { box-sizing: border-box; }
+html { min-width: 320px; background: var(--color-page); }
+body { margin: 0; color: var(--color-ink); background: radial-gradient(circle at 15% 0%, #f3ead8 0, transparent 35rem), var(--color-page); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+button { font: inherit; }
+.launch-page { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(ellipse at 15% 15%, #e7f1e5 0, transparent 36%), radial-gradient(ellipse at 88% 80%, #f3e9db 0, transparent 34%), var(--color-page); }
+.launch-card { width: min(100%, 540px); padding: 56px 48px; border: 1px solid rgba(255,255,255,.85); border-radius: 28px; background: rgba(255,255,255,.82); box-shadow: 0 28px 80px rgba(31,48,44,.09); text-align: center; }
+.brand-mark { width: 44px; height: 44px; display: inline-grid; place-items: center; border-radius: 15px; color: #fff; background: var(--color-primary); font-family: Georgia, serif; font-size: 26px; font-weight: 700; }
+.launch-card .brand-mark { width: 58px; height: 58px; border-radius: 19px; font-size: 34px; }
+.eyebrow { margin: 0 0 12px; color: var(--color-primary); font-size: 11px; font-weight: 750; letter-spacing: .16em; }
+.launch-card .eyebrow { margin-top: 28px; }
+.launch-card h1 { margin: 0; font-size: clamp(30px, 6vw, 44px); line-height: 1.14; letter-spacing: -.045em; }
+.launch-card h1 span { color: var(--color-primary); }
+.launch-copy { max-width: 360px; margin: 16px auto 28px; color: var(--color-muted); line-height: 1.65; }
+.button { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 48px; padding: 0 21px; border-radius: var(--radius-pill); text-decoration: none; font-size: 14px; font-weight: 700; transition: transform .18s ease, background .18s ease; }
+.button-primary { color: white; background: var(--color-primary); }
+.button-primary:hover { background: var(--color-primary-dark); transform: translateY(-2px); }
+.database-error { position:relative; z-index:20; padding:13px 18px; border-bottom:1px solid #e7c6c2; color:#783e39; background:#fff2f0; font-size:13px; line-height:1.5; }
+@media (max-width: 480px) { .launch-card { padding: 42px 24px; } }
