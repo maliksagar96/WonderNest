@@ -27,5 +27,13 @@
 .cost-lines > .cost-column { display:grid; align-content:start; gap:10px; }
 .cost-lines > .cost-column > div { display:flex; justify-content:space-between; gap:12px; }
 .cost-lines .cost-column .batch-total { margin-top:1px; }
+.manufacturing-time-field { max-width:340px; margin-top:15px; }
+.manufacturing-time-field .required-mark { color:#ad514a; }
+.time-breakdown { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-top:15px; padding-top:13px; border-top:1px dashed #dce5dc; }
+.time-breakdown > div { display:flex; flex-direction:column; gap:5px; color:var(--color-muted); font-size:10px; }
+.time-breakdown strong { color:var(--color-ink); font-size:12px; }
+.time-breakdown .time-grand-total { padding-left:13px; border-left:1px solid #dce5dc; }
+.time-breakdown .time-grand-total strong { color:var(--color-primary-dark); font-size:14px; }
 @media(max-width:620px) { .cost-lines > .cost-column { gap:9px; } }
+@media(max-width:620px) { .time-breakdown { grid-template-columns:repeat(2,minmax(0,1fr)); }.time-breakdown .time-grand-total { padding-left:0; border-left:0; } }
 
