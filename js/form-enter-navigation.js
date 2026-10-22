@@ -8,6 +8,8 @@
 
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Enter' || event.isComposing || event.target.closest('button,[type="submit"],[type="button"],[type="reset"],[type="file"]')) return;
+    // Project updates are paragraphs; keep Enter available for inserting line breaks.
+    if (event.target.closest('[data-project-note]')) return;
     const current = event.target.closest(fieldSelector);
     if (!current) return;
 

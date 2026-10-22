@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbfaf6">
+  <title>Issues | WonderNest</title>
+  <link rel="stylesheet" href="../css/baseColors.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/issues.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="../index.html" aria-label="WonderNest home"><span class="brand-mark" aria-hidden="true">W</span><span class="brand-name">wonder<span>nest</span></span></a>
+      <div class="topbar-right"><a class="issues-back" href="front_page.html">← Dashboard</a></div>
+    </header>
+    <main class="issues-page">
+      <section class="issues-heading">
+        <div><p class="eyebrow">APP HEALTH</p><h1>Issues</h1><p>Scan WonderNest’s local database for integrity problems and damaged saved records.</p></div>
+        <button class="button button-primary" id="run-issue-scan" type="button">Run check</button>
+      </section>
+      <section class="issues-panel" aria-live="polite">
+        <div class="issues-status" id="issues-status"><span class="issues-spinner" aria-hidden="true"></span><div><strong>Checking WonderNest…</strong><p>Running a database health check.</p></div></div>
+        <ul class="issues-results" id="issues-results"></ul>
+        <p class="issues-meta" id="issues-meta"></p>
+      </section>
+      <p class="issues-note">This check covers the local database and saved records. It does not automatically detect every code bug or browser error.</p>
+      <footer class="issues-footer">WonderNest · App health</footer>
+    </main>
+  </div>
+  <script src="../js/issues.js"></script>
+</body>
+</html>

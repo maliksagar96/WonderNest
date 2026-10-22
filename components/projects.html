@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbfaf6">
+  <title>Wonder in the Works | WonderNest</title>
+  <link rel="stylesheet" href="../css/baseColors.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/projects.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="../index.html" aria-label="WonderNest home"><span class="brand-mark" aria-hidden="true">W</span><span class="brand-name">wonder<span>nest</span></span></a>
+      <div class="topbar-right"><a class="back-link" href="front_page.html">← Dashboard</a><span class="today-label" id="today-label"></span></div>
+    </header>
+    <main class="projects-page">
+      <section class="projects-page-heading" id="projects-list-heading">
+        <div><p class="eyebrow">IN THE MAKING</p><h1>Wonder in the Works</h1><p>Keep every project, its progress, and your latest notes in one place.</p></div>
+        <button class="button button-primary" id="add-project-button" type="button">＋ New project</button>
+      </section>
+      <div class="projects-page-message" id="projects-page-message" role="alert" hidden></div>
+      <section class="project-list" id="project-list" aria-label="Projects in progress" aria-live="polite"></section>
+      <section class="project-detail" id="project-detail" hidden aria-live="polite"></section>
+      <footer class="projects-footer">WonderNest · Wonder in the Works</footer>
+    </main>
+  </div>
+
+  <dialog class="project-dialog" id="project-dialog">
+    <form id="project-form">
+      <div class="project-dialog-heading"><div><p class="eyebrow">PROJECT DETAILS</p><h2 id="project-dialog-title">New project</h2><p>Set the project name, details, and current progress.</p></div><button class="icon-button" id="close-project-dialog" type="button" aria-label="Close project form">×</button></div>
+      <label class="field">Project name<input name="name" maxlength="120" required placeholder="e.g. Diwali collection"></label>
+      <label class="field">Project details<textarea name="details" maxlength="1200" rows="4" placeholder="What are you working on?"></textarea></label>
+      <label class="field">Progress <span class="project-progress-control"><input name="progress" id="project-progress-input" type="range" min="0" max="100" step="1" value="0"><output id="project-progress-value" for="project-progress-input">0%</output></span></label>
+      <div class="project-form-message" id="project-form-message" role="alert" hidden></div>
+      <div class="project-dialog-actions"><button class="button project-delete-button" id="delete-project-button" type="button" hidden><svg aria-hidden="true" viewBox="0 0 16 16"><path d="M3.5 4.5h9m-8 0 .5 9h5l.5-9M6 4.5V3h4v1.5m-3 2v4m2-4v4"/></svg><span>Delete project</span></button><span class="project-dialog-spacer"></span><button class="button button-secondary" id="cancel-project-form" type="button">Cancel</button><button class="button button-primary" type="submit">Save project</button></div>
+    </form>
+  </dialog>
+
+  <script src="../js/form-enter-navigation.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/projects.js"></script>
+</body>
+</html>

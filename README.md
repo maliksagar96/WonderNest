@@ -26,7 +26,7 @@ Import is allowed only while the SQLite database has no user records. It writes 
 
 ## Data handling
 
-Purchases, vendors, categories, stock items, stock movements, stock synchronization metadata, and recipes are stored in SQLite tables. Writes use transactions. SQLite schema version is recorded in `app_meta`; future schema changes should add migrations and keep existing records.
+Purchases, vendors, categories, stock items, stock movements, stock synchronization metadata, recipes, and ongoing projects are stored in SQLite tables. Writes use transactions. SQLite schema version is recorded in `app_meta`; future schema changes should add migrations and keep existing records.
 
 ## Database maintenance
 

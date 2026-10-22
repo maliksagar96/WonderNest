@@ -15,6 +15,7 @@
 
   async function writeStore(key, value) { try { await window.WonderNestDB.set(key, value); return true; } catch (error) { alert(`Could not save to the local database: ${error.message}`); return false; } }
   function money(amount) { return new Intl.NumberFormat('en-IN', { style:'currency', currency:'INR' }).format(Number(amount) || 0); }
+  function wholeRupees(amount) { return new Intl.NumberFormat('en-IN', { style:'currency', currency:'INR', maximumFractionDigits:0 }).format(Number(amount) || 0); }
   function unitPriceText(amount) { const rounded = (Number(amount) || 0).toFixed(6).replace(/0+$/,'').replace(/\.$/,''); return rounded.includes('.') ? rounded : `${rounded}.00`; }
   function safeText(value) { return String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[char])); }
   function dateInputValue(value) {
@@ -171,11 +172,11 @@
     const shippingBase = shippingGstRate > 0 ? shipping / (1 + shippingGstRate / 100) : shipping;
     const shippingTax = shipping - shippingBase;
     const discount = Number(form.elements.discount.value) || 0;
-    return { subtotal, tax:tax + shippingTax, adjustments:shippingBase-discount, total:Math.max(0,subtotal+tax+shipping-discount) };
+    return { subtotal, tax:tax + shippingTax, adjustments:shippingBase-discount, total:Math.round(Math.max(0,subtotal+tax+shipping-discount)) };
   }
   function recalculate() {
     const totals = calculate();
-    byId('subtotal-value').textContent = money(totals.subtotal); byId('tax-value').textContent = money(totals.tax); byId('adjustments-value').textContent = money(totals.adjustments); byId('grand-total-value').textContent = money(totals.total);
+    byId('subtotal-value').textContent = money(totals.subtotal); byId('tax-value').textContent = money(totals.tax); byId('adjustments-value').textContent = money(totals.adjustments); byId('grand-total-value').textContent = wholeRupees(totals.total);
     // Keep the user's amount in place while editing; the total may be incomplete
     // when old or NA item details are being corrected.
   }
@@ -212,7 +213,7 @@
     summaryPeriodsInitialized = true;
     const periodPurchases = purchases.filter((purchase) => purchaseSelector.value === 'total' || getPurchaseMonth(purchase) === purchaseSelector.value);
     byId('summary-count').textContent = periodPurchases.length;
-    byId('summary-total').textContent = money(periodPurchases.reduce((sum,purchase) => sum + (Number(purchase.total) || 0),0));
+    byId('summary-total').textContent = wholeRupees(periodPurchases.reduce((sum,purchase) => sum + (Number(purchase.total) || 0),0));
     const itc = purchases.reduce((sum,purchase) => sum + (itcSelector.value === 'total' || getPurchaseMonth(purchase) === itcSelector.value ? (Number(purchase.tax) || 0) : 0),0);
     byId('summary-itc').textContent = money(itc);
   }
@@ -246,7 +247,7 @@
         const purchaseLink = safePurchaseLink(purchase.purchaseLink);
         const vendor = getVendor(purchase.vendorId), vendorGstin = purchase.vendorGstin || vendor?.gstin, vendorLabel = purchase.vendorLabel && purchase.vendorLabel !== 'NA' ? purchase.vendorLabel : vendor ? vendorCategory(vendor) : '';
         const vendorTaxDetails = vendorGstin && vendorGstin !== 'NA' ? `<span class="purchase-vendor-tax">GSTIN: ${safeText(vendorGstin)}${vendorLabel ? ` <span class="vendor-label-badge">${safeText(vendorLabel)}</span>` : ''}</span>` : '';
-        return `<tr><td>${safeText(date)}</td><td><strong>${safeText(purchase.vendorName)}</strong>${vendorTaxDetails}${purchaseLink ? `<a class="purchase-source-link" href="${safeText(purchaseLink)}" target="_blank" rel="noopener noreferrer">View purchase ↗</a>` : ''}</td><td>${safeText(purchase.category || 'NA')}</td><td title="${safeText(items)}">${safeText(items.length > 45 ? items.slice(0,42)+'…' : items)}</td><td>${safeText(purchase.invoiceNumber || 'NA')}</td><td><strong>${money(purchase.total)}</strong></td><td><button class="text-button edit-purchase-button" type="button" data-id="${safeText(purchase.id)}">Edit</button></td></tr>`;
+        return `<tr><td>${safeText(date)}</td><td><strong>${safeText(purchase.vendorName)}</strong>${vendorTaxDetails}${purchaseLink ? `<a class="purchase-source-link" href="${safeText(purchaseLink)}" target="_blank" rel="noopener noreferrer">View purchase ↗</a>` : ''}</td><td>${safeText(purchase.category || 'NA')}</td><td title="${safeText(items)}">${safeText(items.length > 45 ? items.slice(0,42)+'…' : items)}</td><td>${safeText(purchase.invoiceNumber || 'NA')}</td><td><strong>${wholeRupees(purchase.total)}</strong></td><td><button class="text-button edit-purchase-button" type="button" data-id="${safeText(purchase.id)}">Edit</button></td></tr>`;
       }).join('');
       return `<tr class="purchase-month-heading"><td colspan="7">${safeText(heading)}</td></tr>${rows}`;
     }).join('');

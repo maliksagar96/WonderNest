@@ -15,7 +15,7 @@ from uuid import uuid4
 ROOT = Path(__file__).resolve().parent
 DB_PATH = ROOT / "database.db"
 DEFAULT_CATEGORIES = ["Inventory / resale goods", "Raw materials", "Packaging", "Equipment", "Office expense", "Other"]
-COLLECTION_TABLES = {"vendors": "vendors", "purchases": "purchases", "categories": "categories", "recipes": "recipes", "recipe_settings": "recipe_settings", "prepared_items": "prepared_items"}
+COLLECTION_TABLES = {"vendors": "vendors", "purchases": "purchases", "categories": "categories", "recipes": "recipes", "recipe_settings": "recipe_settings", "prepared_items": "prepared_items", "projects": "projects"}
 
 
 def connect() -> sqlite3.Connection:
@@ -42,7 +42,7 @@ def initialize_database() -> bool:
     was_new = not DB_PATH.exists()
     with database() as db:
         db.execute("PRAGMA journal_mode = WAL")
-        for table in ("vendors", "purchases", "recipes", "recipe_settings", "prepared_items", "stock_items", "stock_movements"):
+        for table in ("vendors", "purchases", "recipes", "recipe_settings", "prepared_items", "projects", "stock_items", "stock_movements"):
             db.execute(f"CREATE TABLE IF NOT EXISTS {table} (id TEXT PRIMARY KEY, data TEXT NOT NULL)")
         db.execute("CREATE TABLE IF NOT EXISTS categories (name TEXT PRIMARY KEY)")
         db.execute("CREATE TABLE IF NOT EXISTS stock_meta (key TEXT PRIMARY KEY, value TEXT NOT NULL)")
@@ -401,7 +401,7 @@ def restore_prepared_item(prepared_id: str) -> dict:
 
 def database_empty() -> bool:
     with database() as db:
-        for table in ("vendors", "purchases", "recipes", "prepared_items", "stock_items", "stock_movements"):
+        for table in ("vendors", "purchases", "recipes", "prepared_items", "projects", "stock_items", "stock_movements"):
             if db.execute(f"SELECT 1 FROM {table} LIMIT 1").fetchone():
                 return False
         return True
@@ -421,14 +421,15 @@ def import_legacy(payload: object) -> dict:
     stock = from_key("wonderNest.stock.v1", "stock", {})
     if isinstance(stock, list):
         stock = {"items": stock, "movements": []}
-    for name, value in (("vendors", vendors), ("purchases", purchases), ("categories", categories), ("recipes", recipes)):
+    projects = from_key("wonderNest.projects.v1", "projects", [])
+    for name, value in (("vendors", vendors), ("purchases", purchases), ("categories", categories), ("recipes", recipes), ("projects", projects)):
         if not isinstance(value, list):
             raise ValueError(f"Imported {name} data is not a list")
     if not isinstance(stock, dict) or not isinstance(stock.get("items", []), list) or not isinstance(stock.get("movements", []), list):
         raise ValueError("Imported stock data has an unexpected format")
     with database() as db:
         db.execute("BEGIN IMMEDIATE")
-        for name, value in (("vendors", vendors), ("purchases", purchases), ("recipes", recipes)):
+        for name, value in (("vendors", vendors), ("purchases", purchases), ("recipes", recipes), ("projects", projects)):
             rows = []
             for item in value:
                 if not isinstance(item, dict) or not item.get("id"):
@@ -448,14 +449,14 @@ def import_legacy(payload: object) -> dict:
         for key in ("importedPurchaseIds", "purchaseSnapshots"):
             default = [] if key.endswith("Ids") else {}
             db.execute("INSERT INTO stock_meta(key,value) VALUES(?,?)", (key, json_data(stock.get(key, default))))
-    return {"vendors": len(vendors), "purchases": len(purchases), "categories": len(unique_categories), "recipes": len(recipes), "stockItems": len(stock.get("items", [])), "stockMovements": len(stock.get("movements", []))}
+    return {"vendors": len(vendors), "purchases": len(purchases), "categories": len(unique_categories), "recipes": len(recipes), "projects": len(projects), "stockItems": len(stock.get("items", [])), "stockMovements": len(stock.get("movements", []))}
 
 
 def inspect_database() -> dict:
     with database() as db:
         integrity = db.execute("PRAGMA integrity_check").fetchone()[0]
         version = db.execute("SELECT value FROM app_meta WHERE key='schema_version'").fetchone()
-        counts = {table: db.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0] for table in ("vendors", "purchases", "categories", "recipes", "prepared_items", "stock_items", "stock_movements")}
+        counts = {table: db.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0] for table in ("vendors", "purchases", "categories", "recipes", "prepared_items", "projects", "stock_items", "stock_movements")}
     return {"path": str(DB_PATH), "integrity": integrity, "schemaVersion": version[0] if version else "missing", "counts": counts}
 
 

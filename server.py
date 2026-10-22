@@ -22,7 +22,6 @@ from database import (
     restore_prepared_item,
     update_prepared_recipe,
 )
-
 ROOT = Path(__file__).resolve().parent
 HOST = "127.0.0.1"
 PORT = 8000
@@ -65,6 +64,8 @@ class WonderNestHandler(SimpleHTTPRequestHandler):
         try:
             if path == "/api/stock":
                 return self.send_json(get_stock())
+            if path == "/api/issues":
+                return self.send_json(run_issue_scan())
             if path == "/api/status":
                 with database() as db:
                     counts = {name: db.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0] for name, table in COLLECTION_TABLES.items() if name != "categories"}
@@ -176,6 +177,44 @@ def main() -> None:
         print("\nStopping WonderNest...")
     finally:
         server.server_close()
+
+
+def run_issue_scan() -> dict:
+    """Check the local database for structural and saved-record problems."""
+    if not DB_PATH.exists():
+        return {"ok": False, "checkedAt": None, "issues": [{"severity": "error", "title": "Database file is missing", "detail": "Run python database.py to create the WonderNest database."}], "checks": 0}
+
+    issues: list[dict[str, str]] = []
+    checks = 0
+    record_tables = ("vendors", "purchases", "recipes", "recipe_settings", "prepared_items", "projects", "stock_items", "stock_movements")
+    with database() as db:
+        checks += 1
+        integrity = db.execute("PRAGMA integrity_check").fetchone()[0]
+        if integrity != "ok":
+            issues.append({"severity": "error", "title": "Database integrity check failed", "detail": str(integrity)})
+
+        checks += 1
+        existing_tables = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        required_tables = {*record_tables, "categories", "stock_meta", "app_meta"}
+        missing_tables = sorted(required_tables - existing_tables)
+        if missing_tables:
+            issues.append({"severity": "error", "title": "Database tables are missing", "detail": ", ".join(missing_tables)})
+
+        if not missing_tables:
+            for table in record_tables:
+                for row_id, raw in db.execute(f"SELECT id, data FROM {table}"):
+                    checks += 1
+                    try:
+                        record = json.loads(raw)
+                        if not isinstance(record, dict) or str(record.get("id", "")) != str(row_id):
+                            raise ValueError("record ID does not match its database key")
+                    except (json.JSONDecodeError, ValueError, TypeError) as exc:
+                        issues.append({"severity": "error", "title": f"Invalid saved data in {table}", "detail": f"Record {row_id}: {exc}"})
+
+    if not issues:
+        issues.append({"severity": "success", "title": "No database issues found", "detail": "The database integrity, required tables, and saved records look healthy."})
+    from datetime import datetime, timezone
+    return {"ok": not any(item["severity"] == "error" for item in issues), "checkedAt": datetime.now(timezone.utc).isoformat(), "issues": issues, "checks": checks}
 
 
 if __name__ == "__main__":
